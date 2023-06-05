@@ -1,1 +1,1 @@
-# terraform-provider-tmp
+# terraform-provider-temporary
