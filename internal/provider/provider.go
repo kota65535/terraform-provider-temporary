@@ -3,6 +3,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -31,7 +32,7 @@ func New() *schema.Provider {
 			"base": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Temporary directory base",
+				Description: "Path of the base directory where temporary directories/files are created.",
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{},
@@ -45,8 +46,21 @@ func New() *schema.Provider {
 func configure() func(context.Context, *schema.ResourceData) (interface{}, diag.Diagnostics) {
 	return func(cxt context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
 		baseDir := d.Get("base").(string)
+
+		s, err := os.Stat(baseDir)
+		if err == nil {
+			if !s.IsDir() {
+				return nil, diag.FromErr(fmt.Errorf("a non-directory already exists at '%s'", baseDir))
+			}
+		} else {
+			err = os.MkdirAll(baseDir, 0755)
+			if err != nil {
+				return nil, diag.FromErr(err)
+			}
+		}
+
 		tmp := NewTemporary(baseDir)
-		err := tmp.Create()
-		return tmp, diag.FromErr(err)
+
+		return tmp, nil
 	}
 }

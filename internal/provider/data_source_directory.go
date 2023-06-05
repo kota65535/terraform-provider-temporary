@@ -2,12 +2,12 @@ package provider
 
 import (
 	"context"
-	"errors"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"os"
-	"path"
+	"path/filepath"
 )
 
 func dataSourceTemporaryDirectory() *schema.Resource {
@@ -30,26 +30,39 @@ func dataSourceTemporaryDirectory() *schema.Resource {
 }
 
 func dataSourceTemporaryDirectoryRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-
 	name := d.Get("name").(string)
 	tmp := m.(*Temporary)
 
-	p := path.Join(tmp.BaseDir, name)
-
-	s, err := os.Stat(p)
+	// Check if path is inside the base dir
+	path := filepath.Join(tmp.BaseDir, name)
+	tflog.Info(ctx, "creating temporary directory", map[string]any{"path": path})
+	contains, err := ContainsFilePath(tmp.BaseDir, path)
 	if err != nil {
-		err = os.Mkdir(p, 0777)
-		if err != nil {
-			return diag.FromErr(err)
-		}
-	} else {
+		return diag.FromErr(err)
+	}
+	if !contains {
+		return diag.FromErr(fmt.Errorf("cannot create a temporary directory '%s', which is outside the base directory", path))
+	}
+
+	// Clean up the directory if exists
+	s, err := os.Stat(path)
+	if err == nil {
 		if !s.IsDir() {
-			err = errors.New(fmt.Sprintf("non-directory exists in %s", p))
+			return diag.FromErr(fmt.Errorf("a non-directory already exists at '%s'", path))
+		}
+		tflog.Info(ctx, "deleting existing directory", map[string]any{"path": path})
+		err = os.RemoveAll(path)
+		if err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
-	d.SetId(p)
+	err = os.MkdirAll(path, 0755)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	d.SetId(path)
 
 	return nil
 }
