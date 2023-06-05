@@ -31,7 +31,7 @@ func New() *schema.Provider {
 		Schema: map[string]*schema.Schema{
 			"base": {
 				Type:        schema.TypeString,
-				Optional:    true,
+				Required:    true,
 				Description: "Path of the base directory where temporary directories/files are created.",
 			},
 		},
