@@ -12,7 +12,7 @@ import (
 
 func dataSourceTemporaryDirectory() *schema.Resource {
 	return &schema.Resource{
-		Description: "Create a temporary directory.",
+		Description: "Create a temporary directory. The directory is deleted every `terraform apply`, `plan` and `refresh`.",
 		ReadContext: dataSourceTemporaryDirectoryRead,
 		Schema: map[string]*schema.Schema{
 			"id": {

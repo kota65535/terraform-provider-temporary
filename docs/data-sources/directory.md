@@ -3,19 +3,26 @@
 page_title: "temporary_directory Data Source - terraform-provider-temporary"
 subcategory: ""
 description: |-
-  Create a temporary directory.
+  Create a temporary directory. The directory is deleted every terraform apply, plan and refresh.
 ---
 
 # temporary_directory (Data Source)
 
-Create a temporary directory.
+Create a temporary directory. The directory is deleted every `terraform apply`, `plan` and `refresh`.
 
 ## Example Usage
 
 ```terraform
-// Create a temporary directory named "foo"
+# Create a temporary directory named "foo"
 data "temporary_directory" "foo" {
   name = "foo"
+}
+
+# Use the temporary directory as output_path
+data "archive_file" "foo" {
+  type        = "zip"
+  source_file = "${path.module}/init.tpl"
+  output_path = data.temporary_directory.foo.id
 }
 ```
 
