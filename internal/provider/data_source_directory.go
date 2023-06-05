@@ -35,7 +35,7 @@ func dataSourceTemporaryDirectoryRead(ctx context.Context, d *schema.ResourceDat
 
 	// Check if path is inside the base dir
 	path := filepath.Join(tmp.BaseDir, name)
-	tflog.Info(ctx, fmt.Sprintf("directory=%s", path))
+	tflog.Info(ctx, "creating temporary directory", map[string]any{"path": path})
 	contains, err := ContainsFilePath(tmp.BaseDir, path)
 	if err != nil {
 		return diag.FromErr(err)
@@ -50,7 +50,7 @@ func dataSourceTemporaryDirectoryRead(ctx context.Context, d *schema.ResourceDat
 		if !s.IsDir() {
 			return diag.FromErr(fmt.Errorf("a non-directory already exists at '%s'", path))
 		}
-		tflog.Info(ctx, fmt.Sprintf("directory already exists, deleting..."))
+		tflog.Info(ctx, "deleting existing directory", map[string]any{"path": path})
 		err = os.RemoveAll(path)
 		if err != nil {
 			return diag.FromErr(err)
