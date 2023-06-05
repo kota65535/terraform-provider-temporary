@@ -19,7 +19,7 @@ func TestAccDataSourceTemporaryDirectory(t *testing.T) {
 				Config: testAccDataSourceTemporaryDirectory(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccFilesExists(".terraform-provider-temporary", ".terraform/tmp"),
-					resource.TestCheckResourceAttrSet("data.temporary_directory.main", "path"),
+					resource.TestCheckResourceAttr("data.temporary_directory.main", "id", ".terraform/tmp/main"),
 				),
 			},
 		},
