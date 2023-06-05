@@ -50,7 +50,7 @@ func configure() func(context.Context, *schema.ResourceData) (interface{}, diag.
 		s, err := os.Stat(baseDir)
 		if err == nil {
 			if !s.IsDir() {
-				return nil, diag.FromErr(fmt.Errorf("a non-directory already exists at %s", baseDir))
+				return nil, diag.FromErr(fmt.Errorf("a non-directory already exists at '%s'", baseDir))
 			}
 		} else {
 			err = os.MkdirAll(baseDir, 0755)
