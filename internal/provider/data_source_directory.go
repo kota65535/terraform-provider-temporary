@@ -15,6 +15,11 @@ func dataSourceTemporaryDirectory() *schema.Resource {
 		Description: "Create a temporary directory.",
 		ReadContext: dataSourceTemporaryDirectoryRead,
 		Schema: map[string]*schema.Schema{
+			"id": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "Path of the temporary directory created.",
+			},
 			"name": {
 				Type:        schema.TypeString,
 				Required:    true,

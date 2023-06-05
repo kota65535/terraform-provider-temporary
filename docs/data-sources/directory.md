@@ -28,7 +28,6 @@ data "temporary_directory" "foo" {
 
 ### Read-Only
 
-- `id` (String) The ID of this resource.
-- `path` (String) Path of the temporary directory.
+- `id` (String) Path of the temporary directory created.
 
 

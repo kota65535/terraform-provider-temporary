@@ -28,11 +28,6 @@ func init() {
 func New() *schema.Provider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
-			"id": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Path of the temporary directory created.",
-			},
 			"base": {
 				Type:        schema.TypeString,
 				Optional:    true,
