@@ -4,13 +4,13 @@ description: Setup tools according to .tool-versions
 runs:
   using: "composite"
   steps:
-    - name: Gather asdf versions
-      uses: endorama/asdf-parse-tool-versions@v1
+    - name: Get tool versions
+      uses: kota65535/github-asdf-parse-action@v1
       id: versions
     - name: Setup terraform
       uses: hashicorp/setup-terraform@v2
       with:
-        terraform_version: ${{ steps.versions.outputs.tools.terraform }}
+        terraform_version: ${{ steps.versions.outputs.terraform }}
         terraform_wrapper: false
     - name: Setup node (cf. https://github.com/hashicorp/setup-terraform/issues/84)
       uses: actions/setup-node@v3
