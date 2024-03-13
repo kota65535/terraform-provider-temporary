@@ -1,2 +1,2 @@
-golang 1.18
-terraform 1.3.9
+golang 1.22.1
+terraform 1.7.4
