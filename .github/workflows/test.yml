@@ -30,4 +30,4 @@ jobs:
       - name: Setup tools
         uses: ./.github/actions/setup-tools
       - name: Run test
-        run: make test testacc
+        run: TF_LOG=info make test testacc
