@@ -15,7 +15,7 @@ func TestAccDataSourceTemporaryDirectory(t *testing.T) {
 			{
 				Config: testAccDataSourceTemporaryDirectory(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.temporary_directory.main", "id", ".terraform/tmp/main"),
+					resource.TestCheckResourceAttr("data.temporary_directory.main", "id", ".terraform/tmp/foo/bar"),
 				),
 			},
 		},
@@ -24,12 +24,12 @@ func TestAccDataSourceTemporaryDirectory(t *testing.T) {
 
 func testAccDataSourceTemporaryDirectory() string {
 	return fmt.Sprintf(`
-    provider "temporary" {
+  provider "temporary" {
 		base = "${path.root}/.terraform/tmp"
-    }
+  }
 
 	data "temporary_directory" "main" {
-		name = "main"
+		name = "foo/bar"
 	}
 	`)
 }
