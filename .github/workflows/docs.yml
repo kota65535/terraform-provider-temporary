@@ -1,0 +1,40 @@
+name: Generate Docs
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - README.md
+
+
+jobs:
+  show-context:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show github context object
+        run: echo $JSON
+        env:
+          JSON: ${{ toJSON(github) }}
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup tools
+        uses: ./.github/actions/setup-tools
+      - name: Configure git
+        uses: kota65535/github-git-config-action@v2
+        with:
+          user.name: github-actions[bot]
+          user.email: 41898282+github-actions[bot]@users.noreply.github.com
+      - name: Run go generate
+        run: make generate
+      - name: Commit & Push
+        run: |
+          git add docs
+          if ! git diff-index --cached --quiet HEAD; then
+            git commit -m 'update docs'
+            git push origin HEAD
+          fi
