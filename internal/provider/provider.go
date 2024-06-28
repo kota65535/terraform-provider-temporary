@@ -31,8 +31,8 @@ func New() *schema.Provider {
 		Schema: map[string]*schema.Schema{
 			"base": {
 				Type:        schema.TypeString,
-				Required:    true,
-				Description: "Path of the base directory where temporary directories/files are created.",
+				Optional:    true,
+				Description: "Path of the base directory where temporary directories/files are created. If not specified, OS-dependent temporary directory is used.",
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{},
@@ -46,6 +46,9 @@ func New() *schema.Provider {
 func configure() func(context.Context, *schema.ResourceData) (interface{}, diag.Diagnostics) {
 	return func(cxt context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
 		baseDir := d.Get("base").(string)
+		if baseDir == "" {
+			baseDir = os.TempDir()
+		}
 
 		s, err := os.Stat(baseDir)
 		if err == nil {
