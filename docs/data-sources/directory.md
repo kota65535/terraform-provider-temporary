@@ -36,5 +36,3 @@ data "archive_file" "foo" {
 ### Read-Only
 
 - `id` (String) Path of the temporary directory created.
-
-
