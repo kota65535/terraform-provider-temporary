@@ -5,7 +5,7 @@ runs:
   using: "composite"
   steps:
     - name: Get tool versions
-      uses: kota65535/github-asdf-parse-action@v1
+      uses: kota65535/github-asdf-parse-action@v2
       id: versions
     - name: Setup terraform
       uses: hashicorp/setup-terraform@v3
