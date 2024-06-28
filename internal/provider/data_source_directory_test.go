@@ -61,9 +61,9 @@ func testAccDataSourceTemporaryDirectory() string {
 
 func testAccDataSourceTemporaryDirectoryWithBase() string {
 	return fmt.Sprintf(`
-    provider "temporary" {
-		  base = "${path.root}/.terraform/tmp"
-    }
+		provider "temporary" {
+			base = "${path.root}/.terraform/tmp"
+		}
 
 		data "temporary_directory" "main" {
 			name = "main"
