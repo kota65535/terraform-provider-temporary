@@ -2,7 +2,7 @@ module github.com/kota65535/terraform-provider-temporary
 
 go 1.21
 
-toolchain go1.22.4
+toolchain go1.22.6
 
 require (
 	github.com/hashicorp/terraform-plugin-docs v0.19.4
